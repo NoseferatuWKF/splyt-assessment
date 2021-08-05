@@ -1,6 +1,77 @@
 {
   "version": 2,
   "projects": {
+    "data-access": {
+      "root": "libs/data-access",
+      "sourceRoot": "libs/data-access/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/data-access/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/data-access"],
+          "options": {
+            "jestConfig": "libs/data-access/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "taxi-backend": {
+      "root": "apps/taxi-backend",
+      "sourceRoot": "apps/taxi-backend/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/taxi-backend",
+            "main": "apps/taxi-backend/src/main.ts",
+            "tsConfig": "apps/taxi-backend/tsconfig.app.json",
+            "assets": ["apps/taxi-backend/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/taxi-backend/src/environments/environment.ts",
+                  "with": "apps/taxi-backend/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "taxi-backend:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/taxi-backend/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/taxi-backend"],
+          "options": {
+            "jestConfig": "apps/taxi-backend/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "taxi-map": {
       "root": "apps/taxi-map",
       "sourceRoot": "apps/taxi-map/src",
